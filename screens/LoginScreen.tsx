@@ -1,4 +1,4 @@
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, ImageBackground, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { Reutilizables } from "../styles/reutilizables";
@@ -6,7 +6,10 @@ import { Reutilizables } from "../styles/reutilizables";
 export const LoginScreen = () => {
   const navigation = useNavigation();
   return (
-    <View style={Reutilizables.container}>
+    <ImageBackground
+      source={require("../assets/imgs/fondoLogin.png")}
+      style={Reutilizables.container}
+    >
       <Text>LoginScreen</Text>
       {/* simular inicio sesion */}
       <Button
@@ -22,7 +25,7 @@ export const LoginScreen = () => {
         }
         title="Registrarse"
       />
-    </View>
+    </ImageBackground>
   );
 };
 
