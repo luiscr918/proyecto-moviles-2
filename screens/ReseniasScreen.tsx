@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 
-export const HomeScreen = () => {
+export const ReseniasScreen = () => {
   return (
     <View>
-      <Text style={{ fontSize: 25 }}>HomeScreen</Text>
+      <Text>ReseniasScreen</Text>
     </View>
   );
 };
