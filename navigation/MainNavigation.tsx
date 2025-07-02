@@ -1,5 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
+import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import Entypo from "@expo/vector-icons/Entypo";
 import Foundation from "@expo/vector-icons/Foundation";
@@ -9,12 +10,27 @@ import { HomeScreen } from "../screens/HomeScreen";
 import { RegistroEmprendimientoScreen } from "../screens/RegistroEmprendimientoScreen";
 import { MySpaceScreen } from "../screens/MySpaceScreen";
 import { PerfilScreen } from "../screens/PerfilScreen";
-import { ProductosScreen } from "../screens/ProductosScreen";
-import { ServiciosScreen } from "../screens/ServiciosScreen";
 import { SolicitudesScreen } from "../screens/SolicitudesScreen";
 import { ReseniasScreen } from "../screens/ReseniasScreen";
+import { LoginScreen } from "../screens/LoginScreen";
+import { RegistroEmprendedorScreen } from "../screens/RegistroEmprendedorScreen";
+import { ProductosServiciosScreen } from "../screens/ProductosServiciosScreen";
 const Tab = createBottomTabNavigator();
 const Draw = createDrawerNavigator();
+const Stack = createStackNavigator();
+const MyStack = () => {
+  return (
+    <Stack.Navigator initialRouteName="Login">
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Registro" component={RegistroEmprendedorScreen} />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="Principal"
+        component={MyTab}
+      />
+    </Stack.Navigator>
+  );
+};
 
 const MyTab = () => {
   return (
@@ -56,8 +72,10 @@ const MyDraw = () => {
     <Draw.Navigator>
       <Draw.Screen name="Menu" component={MySpaceScreen} />
       <Draw.Screen name="Perfil" component={PerfilScreen} />
-      <Draw.Screen name="Mis Productos" component={ProductosScreen} />
-      <Draw.Screen name="Mis Servicios" component={ServiciosScreen} />
+      <Draw.Screen
+        name="Mis Productos/Servicios"
+        component={ProductosServiciosScreen}
+      />
       <Draw.Screen name="Solicitudes" component={SolicitudesScreen} />
       <Draw.Screen name="Reseñas" component={ReseniasScreen} />
     </Draw.Navigator>
@@ -67,7 +85,7 @@ const MyDraw = () => {
 export const MainNavigation = () => {
   return (
     <NavigationContainer>
-      <MyTab />
+      <MyStack />
     </NavigationContainer>
   );
 };

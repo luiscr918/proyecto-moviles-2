@@ -2,10 +2,10 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { Reutilizables } from "../styles/reutilizables";
 
-export const SolicitudesScreen = () => {
+export const ProductosServiciosScreen = () => {
   return (
     <View style={Reutilizables.container}>
-      <Text>SolicitudesScreen</Text>
+      <Text>Productos/Servicios Screen</Text>
     </View>
   );
 };
