@@ -1,11 +1,12 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import Entypo from "@expo/vector-icons/Entypo";
 import Foundation from "@expo/vector-icons/Foundation";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { StyleSheet, View } from "react-native";
+
 import { HomeScreen } from "../screens/HomeScreen";
 import { RegistroEmprendimientoScreen } from "../screens/RegistroEmprendimientoScreen";
 import { MySpaceScreen } from "../screens/MySpaceScreen";
@@ -15,12 +16,25 @@ import { ReseniasScreen } from "../screens/ReseniasScreen";
 import { LoginScreen } from "../screens/LoginScreen";
 import { RegistroEmprendedorScreen } from "../screens/RegistroEmprendedorScreen";
 import { ProductosServiciosScreen } from "../screens/ProductosServiciosScreen";
+
 const Tab = createBottomTabNavigator();
 const Draw = createDrawerNavigator();
 const Stack = createStackNavigator();
+
+const COLOR_FONDO = "#000";
+const COLOR_PRIMARIO = "#0C86FF";
+const COLOR_TEXTO = "#fff";
+
 const MyStack = () => {
   return (
-    <Stack.Navigator initialRouteName="Login">
+    <Stack.Navigator
+      initialRouteName="Login"
+      screenOptions={{
+        headerStyle: { backgroundColor: COLOR_FONDO },
+        headerTintColor: COLOR_PRIMARIO,
+        headerTitleStyle: { fontWeight: "bold" },
+      }}
+    >
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Registro" component={RegistroEmprendedorScreen} />
       <Stack.Screen
@@ -34,42 +48,64 @@ const MyStack = () => {
 
 const MyTab = () => {
   return (
-    <Tab.Navigator screenOptions={{ headerShown: false }}>
+    <Tab.Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarStyle: {
+          backgroundColor: COLOR_FONDO,
+          borderTopColor: COLOR_PRIMARIO,
+        },
+        tabBarActiveTintColor: COLOR_PRIMARIO,
+        tabBarInactiveTintColor: "#888",
+        tabBarShowLabel: true,
+      }}
+    >
       <Tab.Screen
-        options={{
-          tabBarIcon: () => <Entypo name="home" size={24} color="black" />,
-        }}
         name="Home"
         component={HomeScreen}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <Entypo name="home" size={24} color={color} />
+          ),
+        }}
       />
       <Tab.Screen
+        name="Add"
+        component={RegistroEmprendimientoScreen}
         options={{
           tabBarIcon: () => (
             <View style={styles.addButton}>
-              <FontAwesome6 name="add" size={28} color="black" />
+              <FontAwesome6 name="add" size={28} color={COLOR_PRIMARIO} />
             </View>
           ),
-          //metodo para ocultar la palabra "add"
           tabBarLabel: () => null,
         }}
-        name="Add"
-        component={RegistroEmprendimientoScreen}
       />
       <Tab.Screen
-        options={{
-          tabBarIcon: () => (
-            <Foundation name="torso-business" size={24} color="black" />
-          ),
-        }}
         name="My Space"
         component={MyDraw}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <Foundation name="torso-business" size={24} color={color} />
+          ),
+        }}
       />
     </Tab.Navigator>
   );
 };
+
 const MyDraw = () => {
   return (
-    <Draw.Navigator>
+    <Draw.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: COLOR_FONDO },
+        headerTintColor: COLOR_PRIMARIO,
+        drawerStyle: { backgroundColor: COLOR_FONDO },
+        drawerActiveTintColor: COLOR_PRIMARIO,
+        drawerInactiveTintColor: COLOR_TEXTO,
+        headerTitleStyle: { fontWeight: "bold" },
+      }}
+    >
       <Draw.Screen name="Menu" component={MySpaceScreen} />
       <Draw.Screen name="Perfil" component={PerfilScreen} />
       <Draw.Screen
@@ -84,7 +120,20 @@ const MyDraw = () => {
 
 export const MainNavigation = () => {
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      theme={{
+        ...DefaultTheme,
+        colors: {
+          ...DefaultTheme.colors,
+          background: COLOR_FONDO,
+          card: COLOR_FONDO,
+          text: COLOR_TEXTO,
+          primary: COLOR_PRIMARIO,
+          border: COLOR_PRIMARIO,
+          notification: COLOR_PRIMARIO,
+        },
+      }}
+    >
       <MyStack />
     </NavigationContainer>
   );
@@ -95,14 +144,14 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: "#ffffff",
+    backgroundColor: COLOR_TEXTO,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 4,
-    borderColor: "#fff",
-    marginBottom: 20, // Hace que sobresalga
-    elevation: 5, // Sombra en Android
-    shadowColor: "#000", // Sombra en iOS
+    borderColor: COLOR_TEXTO,
+    marginBottom: 20, // Para sobresalir
+    elevation: 5,
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 3.84,
