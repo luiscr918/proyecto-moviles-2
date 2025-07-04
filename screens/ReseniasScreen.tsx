@@ -1,7 +1,8 @@
 import React from "react";
-import { StyleSheet, Text, View, FlatList, SafeAreaView } from "react-native";
-import { Reutilizables } from "../styles/reutilizables";
+import { Text, View, FlatList, SafeAreaView } from "react-native";
 import { Feather } from "@expo/vector-icons";
+import { reseniasStyle } from "../styles/reseniasStyle";
+import { Reutilizables } from "../styles/reutilizables";
 
 const reseñas = [
   {
@@ -49,14 +50,19 @@ export const ReseniasScreen = () => {
 
   return (
     <SafeAreaView style={Reutilizables.container}>
-      <Text style={styles.title}>Reseñas</Text>
-      <View style={styles.summary}>
-        <Text style={styles.promedioTexto}>
+      <Text style={reseniasStyle.title}>Reseñas</Text>
+      <View style={reseniasStyle.summary}>
+        <Text style={reseniasStyle.promedioTexto}>
           Valoración promedio:{" "}
-          <Text style={styles.promedioNumero}>{promedio.toFixed(1)}</Text> / 5
+          <Text style={reseniasStyle.promedioNumero}>
+            {promedio.toFixed(1)}
+          </Text>{" "}
+          / 5
         </Text>
         <Estrellas cantidad={Math.round(promedio)} />
-        <Text style={styles.totalResenas}>Total reseñas: {reseñas.length}</Text>
+        <Text style={reseniasStyle.totalResenas}>
+          Total reseñas: {reseñas.length}
+        </Text>
       </View>
 
       <FlatList
@@ -64,13 +70,13 @@ export const ReseniasScreen = () => {
         keyExtractor={(item) => item.id}
         contentContainerStyle={{ paddingBottom: 60 }}
         renderItem={({ item }) => (
-          <View style={styles.reseñaItem}>
-            <View style={styles.reseñaHeader}>
-              <Text style={styles.usuario}>{item.usuario}</Text>
+          <View style={reseniasStyle.reseñaItem}>
+            <View style={reseniasStyle.reseñaHeader}>
+              <Text style={reseniasStyle.usuario}>{item.usuario}</Text>
               <Estrellas cantidad={item.rating} />
             </View>
-            <Text style={styles.comentario}>{item.comentario}</Text>
-            <Text style={styles.fecha}>
+            <Text style={reseniasStyle.comentario}>{item.comentario}</Text>
+            <Text style={reseniasStyle.fecha}>
               {new Date(item.fecha).toLocaleDateString()}
             </Text>
           </View>
@@ -79,56 +85,3 @@ export const ReseniasScreen = () => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  title: {
-    fontSize: 32,
-    fontWeight: "800",
-    color: "#0C86FF",
-    textAlign: "center",
-    marginVertical: 20,
-  },
-  summary: {
-    alignItems: "center",
-    marginBottom: 20,
-  },
-  promedioTexto: {
-    fontSize: 18,
-    color: "#eee",
-  },
-  promedioNumero: {
-    fontWeight: "700",
-    color: "#34d399",
-  },
-  totalResenas: {
-    color: "#aaa",
-    marginTop: 6,
-  },
-  reseñaItem: {
-    backgroundColor: "#111",
-    borderRadius: 15,
-    padding: 16,
-    marginBottom: 15,
-    marginHorizontal: 20,
-  },
-  reseñaHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginBottom: 8,
-  },
-  usuario: {
-    color: "#0C86FF",
-    fontWeight: "700",
-    fontSize: 16,
-  },
-  comentario: {
-    color: "#eee",
-    fontSize: 15,
-    marginBottom: 8,
-  },
-  fecha: {
-    color: "#666",
-    fontSize: 13,
-    textAlign: "right",
-  },
-});
