@@ -2,11 +2,14 @@ import React from "react";
 import { Text, View, SafeAreaView, TouchableOpacity } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { myspaceStyle } from "../styles/myspaceStyles";
+import { useNavigation, DrawerActions } from "@react-navigation/native";
 
 export const MySpaceScreen = () => {
   const emprendimientosPublicados = 4;
   const solicitudesRecibidas = 12;
   const valoracionPromedio = 4.8;
+
+  const navigation = useNavigation();
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -33,7 +36,10 @@ export const MySpaceScreen = () => {
           </Text>
         </View>
 
-        <TouchableOpacity style={myspaceStyle.button}>
+        <TouchableOpacity
+          onPress={() => navigation.dispatch(DrawerActions.openDrawer())}
+          style={myspaceStyle.button}
+        >
           <Text style={myspaceStyle.buttonText}>Ver más detalles</Text>
         </TouchableOpacity>
       </LinearGradient>

@@ -31,7 +31,7 @@ const MyStack = () => {
       initialRouteName="Login"
       screenOptions={{
         headerStyle: { backgroundColor: COLOR_FONDO },
-        headerTintColor: COLOR_PRIMARIO,
+        headerTintColor: COLOR_TEXTO,
         headerTitleStyle: { fontWeight: "bold" },
       }}
     >
@@ -99,7 +99,7 @@ const MyDraw = () => {
     <Draw.Navigator
       screenOptions={{
         headerStyle: { backgroundColor: COLOR_FONDO },
-        headerTintColor: COLOR_PRIMARIO,
+        headerTintColor: COLOR_TEXTO,
         drawerStyle: { backgroundColor: COLOR_FONDO },
         drawerActiveTintColor: COLOR_PRIMARIO,
         drawerInactiveTintColor: COLOR_TEXTO,

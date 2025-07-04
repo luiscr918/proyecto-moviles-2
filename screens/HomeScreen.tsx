@@ -8,10 +8,11 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { homeStyle } from "../styles/homeStyle";
+import { CommonActions, useNavigation } from "@react-navigation/native";
 
 export const HomeScreen = () => {
+  const navigation = useNavigation();
   const nombre = "Luis";
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <LinearGradient
@@ -43,7 +44,12 @@ export const HomeScreen = () => {
             Hoy es el mejor día para impulsar tu emprendimiento.
           </Text>
 
-          <TouchableOpacity style={homeStyle.button}>
+          <TouchableOpacity
+            onPress={() =>
+              navigation.dispatch(CommonActions.navigate({ name: "My Space" }))
+            }
+            style={homeStyle.button}
+          >
             <Text style={homeStyle.buttonText}>Explorar mi espacio</Text>
           </TouchableOpacity>
         </View>
