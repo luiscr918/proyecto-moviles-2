@@ -28,9 +28,7 @@ export const HomeScreen = () => {
 
           <View style={homeStyle.imageWrapper}>
             <Image
-              source={{
-                uri: "https://purina.com.ec/sites/default/files/2022-11/purina-brand-cuanto-vive-un-gato-nota_03.jpg",
-              }}
+              source={require("../assets/imgs/logoStartUpsPartners.jpeg")}
               style={homeStyle.image}
               resizeMode="cover"
             />
