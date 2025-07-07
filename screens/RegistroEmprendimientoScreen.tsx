@@ -71,12 +71,7 @@ export const RegistroEmprendimientoScreen = () => {
             cursorColor="#0C86FF"
           />
 
-          <TextInput
-            style={styles.input}
-            placeholder="Página web o redes sociales (opcional)"
-            placeholderTextColor="#aaa"
-            cursorColor="#0C86FF"
-          />
+
 
           <TouchableOpacity style={styles.button}>
             <Text style={styles.buttonText}>Registrar Emprendimiento</Text>

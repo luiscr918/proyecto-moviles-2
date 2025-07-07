@@ -14,7 +14,6 @@ export const ProductosServiciosScreen = () => {
   // Datos quemados
   const producto = {
     nombre: "Café artesanal",
-    tipo: "Producto",
     descripcion: "Café orgánico de alta calidad, tostado localmente.",
     precio: "5.00",
   };
@@ -36,14 +35,6 @@ export const ProductosServiciosScreen = () => {
           editable={false}
         />
 
-        <Text style={styles.label}>Tipo</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Tipo"
-          placeholderTextColor="#aaa"
-          value={producto.tipo}
-          editable={false}
-        />
 
         <Text style={styles.label}>Descripción</Text>
         <TextInput
