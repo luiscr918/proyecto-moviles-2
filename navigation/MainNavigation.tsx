@@ -35,7 +35,11 @@ const MyStack = () => {
         headerTitleStyle: { fontWeight: "bold" },
       }}
     >
-      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        name="Login"
+        component={LoginScreen}
+      />
       <Stack.Screen name="Registro" component={RegistroEmprendedorScreen} />
       <Stack.Screen
         options={{ headerShown: false }}
