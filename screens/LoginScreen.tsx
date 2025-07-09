@@ -1,75 +1,68 @@
-import React from "react";
-import { Button, Image, StyleSheet, Text, View } from "react-native";
+import React, { useState } from "react";
+import { Alert, Button, Image, Text, TextInput, View } from "react-native";
 import { CommonActions, useNavigation } from "@react-navigation/native";
 import { Reutilizables } from "../styles/reutilizables";
+import { loginStyles } from "../styles/loginStyles";
+import { supabase } from "../supabase/Config";
 
 export const LoginScreen = () => {
   const navigation = useNavigation();
-
+  const [correo, setCorreo] = useState("");
+  const [contrasenia, setContrasenia] = useState("");
+  //funcion para iniciar sesion
+  const login = async () => {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: correo,
+      password: contrasenia,
+    });
+    if (data.user != null) {
+      navigation.dispatch(CommonActions.navigate({ name: "Principal" }));
+    } else {
+      Alert.alert("No se pudo iniciar sesion", error?.message);
+    }
+  };
   return (
-    <View style={[Reutilizables.container, styles.inner]}>
-      <Text style={styles.title}>Welcome to StartUps Partners</Text>
-      <View style={styles.imageCircle}>
+    <View style={[Reutilizables.container, loginStyles.inner]}>
+      <Text style={loginStyles.title}>Welcome to StartUps Partners</Text>
+      <View style={loginStyles.imageCircle}>
         <Image
           source={require("../assets/imgs/circular.jpeg")}
-          style={styles.image}
+          style={loginStyles.image}
         />
       </View>
-      {/* simular inicio de sesión */}
-      <View style={styles.buttonContainer}>
-        <Button
-          onPress={() =>
-            navigation.dispatch(CommonActions.navigate({ name: "Principal" }))
-          }
-          title="Iniciar Sesión"
-          color="#0C86FF"
-        />
+      {/* campos de login */}
+      <TextInput
+        style={loginStyles.input}
+        placeholder="Correo electrónico"
+        placeholderTextColor="#aaa"
+        keyboardType="email-address"
+        autoCapitalize="none"
+        cursorColor="#0C86FF"
+        value={correo}
+        onChangeText={setCorreo}
+      />
+      <TextInput
+        style={loginStyles.input}
+        placeholder="Contraseña"
+        placeholderTextColor="#aaa"
+        secureTextEntry
+        cursorColor="#0C86FF"
+        value={contrasenia}
+        onChangeText={setContrasenia}
+      />
+      {/* botón de inicio de sesión */}
+      <View style={loginStyles.buttonContainer}>
+        <Button onPress={login} title="Iniciar Sesión" color="#0C86FF" />
       </View>
-
-      {/* simular registro de usuario-emprendedor */}
-      <View style={styles.buttonContainer}>
-        <Button
-          onPress={() =>
-            navigation.dispatch(CommonActions.navigate({ name: "Registro" }))
-          }
-          title="Registrarse"
-          color="#0C86FF"
-        />
-      </View>
+      {/* botón de registro */}
+      <Text
+        style={loginStyles.textRegister}
+        onPress={() =>
+          navigation.dispatch(CommonActions.navigate({ name: "Registro" }))
+        }
+      >
+        ¿No tienes una cuenta? registrate aquí
+      </Text>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  inner: {
-    paddingHorizontal: 30,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 26,
-    color: "#0C86FF",
-    fontWeight: "bold",
-    marginBottom: 40,
-    textAlign:'center'
-  },
-  buttonContainer: {
-    marginVertical: 10,
-    width: "100%",
-  },
-  imageCircle: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    overflow: "hidden",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 15,
-    backgroundColor: "#1287FB", // Opcional, para fondo blanco
-  },
-  image: {
-    width: 100,
-    height: 100,
-    resizeMode: "contain",
-  },
-});
