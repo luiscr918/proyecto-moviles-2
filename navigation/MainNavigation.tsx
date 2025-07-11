@@ -1,6 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import Entypo from "@expo/vector-icons/Entypo";
 import Foundation from "@expo/vector-icons/Foundation";
@@ -15,12 +16,13 @@ import { SolicitudesScreen } from "../screens/SolicitudesScreen";
 import { ReseniasScreen } from "../screens/ReseniasScreen";
 import { LoginScreen } from "../screens/LoginScreen";
 import { RegistroEmprendedorScreen } from "../screens/RegistroEmprendedorScreen";
-import { ProductosServiciosScreen } from "../screens/ProductosServiciosScreen";
+import { AllServices } from "../screens/AllServices";
+import { EmprendimientosServiceScreen } from "../screens/EmprendimientosServiceScreen";
 
 const Tab = createBottomTabNavigator();
 const Draw = createDrawerNavigator();
 const Stack = createStackNavigator();
-
+const Top = createMaterialTopTabNavigator();
 const COLOR_FONDO = "#000";
 const COLOR_PRIMARIO = "#0C86FF";
 const COLOR_TEXTO = "#fff";
@@ -112,13 +114,21 @@ const MyDraw = () => {
     >
       <Draw.Screen name="Menu" component={MySpaceScreen} />
       <Draw.Screen name="Perfil" component={PerfilScreen} />
-      <Draw.Screen
-        name="Mis Productos/Servicios"
-        component={ProductosServiciosScreen}
-      />
+      <Draw.Screen name="Mis Servicios" component={MyTop} />
       <Draw.Screen name="Solicitudes" component={SolicitudesScreen} />
       <Draw.Screen name="Reseñas" component={ReseniasScreen} />
     </Draw.Navigator>
+  );
+};
+const MyTop = () => {
+  return (
+    <Top.Navigator>
+      <Top.Screen name="Todos mis Servicios" component={AllServices} />
+      <Top.Screen
+        name="Agregar Servicio"
+        component={EmprendimientosServiceScreen}
+      />
+    </Top.Navigator>
   );
 };
 
