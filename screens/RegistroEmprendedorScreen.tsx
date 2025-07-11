@@ -51,6 +51,7 @@ export const RegistroEmprendedorScreen = () => {
   //funcion para guardar los demas datos
   const guardar = async (uid: string) => {
     const { error } = await supabase.from("emprendedor").insert({
+      uid: uid,
       cedula: cedula,
       nombre_completo: nombre,
       correo: correo,

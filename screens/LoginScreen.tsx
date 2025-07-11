@@ -17,6 +17,8 @@ export const LoginScreen = () => {
     });
     if (data.user != null) {
       navigation.dispatch(CommonActions.navigate({ name: "Principal" }));
+      setCorreo("");
+      setContrasenia("");
     } else {
       Alert.alert("No se pudo iniciar sesion", error?.message);
     }
