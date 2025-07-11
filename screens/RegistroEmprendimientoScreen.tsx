@@ -9,18 +9,52 @@ import {
   Modal,
   FlatList,
   SafeAreaView,
+  Alert,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { supabase } from "../supabase/Config";
 
-const tiposEmprendimiento = ["Servicios", "Productos"];
+const tiposEmprendimiento = ["Comida", "Belleza", "Ropa", "Tecnologia"];
 
 export const RegistroEmprendimientoScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [tipoSeleccionado, setTipoSeleccionado] = useState("");
+  //variables a guardar
+  const [ruc, setRuc] = useState("");
+  const [nombre, setNombre] = useState("");
+  const [categoria, setCategoria] = useState("");
+  const [descripcion, setDescripcion] = useState("");
+  const [direccion, setDireccion] = useState("");
 
   const seleccionarTipo = (tipo: string) => {
-    setTipoSeleccionado(tipo);
+    setCategoria(tipo);
     setModalVisible(false);
+  };
+  //guardar emprendimiento en la base de datos:
+  //se guardara con el uid del emprendedor que inicio sesion
+  const guardarEmprendimiento = async () => {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user != null) {
+      const { error } = await supabase.from("emprendimiento").insert({
+        ruc: ruc,
+        uid_emprendedor: user.id,
+        nombre_emprendimiento: nombre,
+        categoria: categoria,
+        descripcion: descripcion,
+        direccion: direccion,
+      });
+      if (!error) {
+        Alert.alert("Exito", "Se registro su emprendimiento correctamente");
+        setCategoria("");
+        setNombre("");
+        setRuc("");
+        setDescripcion("");
+        setDireccion("");
+      } else {
+        Alert.alert("Error al registrar emprendimiento", error.message);
+      }
+    }
   };
 
   return (
@@ -31,20 +65,29 @@ export const RegistroEmprendimientoScreen = () => {
           keyboardShouldPersistTaps="handled"
         >
           <Text style={styles.title}>Registro de Emprendimiento</Text>
-
+          <TextInput
+            style={styles.input}
+            placeholder="RUC del emprendimiento"
+            placeholderTextColor="#aaa"
+            cursorColor="#0C86FF"
+            value={ruc}
+            onChangeText={setRuc}
+          />
           <TextInput
             style={styles.input}
             placeholder="Nombre del emprendimiento"
             placeholderTextColor="#aaa"
             cursorColor="#0C86FF"
+            value={nombre}
+            onChangeText={setNombre}
           />
 
           <TouchableOpacity
             style={styles.input}
             onPress={() => setModalVisible(true)}
           >
-            <Text style={{ color: tipoSeleccionado ? "#fff" : "#888" }}>
-              {tipoSeleccionado || "Selecciona el tipo de emprendimiento"}
+            <Text style={{ color: categoria ? "#fff" : "#888" }}>
+              {categoria || "Selecciona la categoria de emprendimiento"}
             </Text>
           </TouchableOpacity>
 
@@ -54,26 +97,23 @@ export const RegistroEmprendimientoScreen = () => {
             placeholderTextColor="#aaa"
             multiline
             cursorColor="#0C86FF"
+            value={descripcion}
+            onChangeText={setDescripcion}
           />
 
           <TextInput
             style={styles.input}
-            placeholder="Dirección (opcional)"
+            placeholder="Dirección"
             placeholderTextColor="#aaa"
             cursorColor="#0C86FF"
+            value={direccion}
+            onChangeText={setDireccion}
           />
 
-          <TextInput
-            style={styles.input}
-            placeholder="Teléfono o contacto directo (opcional)"
-            placeholderTextColor="#aaa"
-            keyboardType="phone-pad"
-            cursorColor="#0C86FF"
-          />
-
-
-
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity
+            onPress={guardarEmprendimiento}
+            style={styles.button}
+          >
             <Text style={styles.buttonText}>Registrar Emprendimiento</Text>
           </TouchableOpacity>
         </ScrollView>
