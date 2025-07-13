@@ -39,7 +39,7 @@ export const PerfilScreen = () => {
   //traera el usuario logeado cada que ejecute el screen
   useEffect(() => {
     traerLogeado();
-  }, []);
+  }, [emprendedor]);
 
   const onEditar = async (campo: string, valor: string) => {
     const { error } = await supabase

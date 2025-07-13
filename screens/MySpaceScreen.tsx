@@ -1,15 +1,45 @@
-import React from "react";
-import { Text, View, SafeAreaView, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  Text,
+  View,
+  SafeAreaView,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { myspaceStyle } from "../styles/myspaceStyles";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
+import { supabase } from "../supabase/Config";
+import { Emprendimiento } from "./EmprendimientosServiceScreen";
 
 export const MySpaceScreen = () => {
-  const emprendimientosPublicados = 4;
+  const [empTotales, setEmpTotales] = useState<Emprendimiento[]>();
   const solicitudesRecibidas = 12;
   const valoracionPromedio = 4.8;
 
   const navigation = useNavigation();
+  //traer el total de emprendimientos del emprendedor:
+  const emprendimientosTotales = async () => {
+    //primero traigo el emprendedor que inicio sesión
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user) {
+      //traigo los emprendimientos que tiene el emprendedor que inicio sesion1
+      const { data, error } = await supabase
+        .from("emprendimiento")
+        .select("*")
+        .eq("uid_emprendedor", user.id);
+      if (!error) {
+        setEmpTotales(data);
+      } else {
+        Alert.alert("Error al traer sus emprendimientos", error.message);
+      }
+    }
+  };
+  useEffect(() => {
+    emprendimientosTotales();
+  }, []);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -21,7 +51,7 @@ export const MySpaceScreen = () => {
 
         <View style={myspaceStyle.infoBlock}>
           <Text style={myspaceStyle.label}>Emprendimientos publicados</Text>
-          <Text style={myspaceStyle.value}>{emprendimientosPublicados}</Text>
+          <Text style={myspaceStyle.value}>{empTotales?.length}</Text>
         </View>
 
         <View style={myspaceStyle.infoBlock}>

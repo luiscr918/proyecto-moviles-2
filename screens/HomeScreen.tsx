@@ -36,7 +36,7 @@ export const HomeScreen = () => {
   //traera el usuario logeado cada que ejecute el screen
   useEffect(() => {
     traerLogeado();
-  }, []);
+  }, [emprendedor]);
 
   const navigation = useNavigation();
   return (
