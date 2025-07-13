@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   cancelar: {
-    color: "#0C86FF",
+    color: "#f04c4c",
     textAlign: "center",
     fontSize: 15,
   },

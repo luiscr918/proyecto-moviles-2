@@ -51,7 +51,9 @@ export const EmprendimientosServiceScreen = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <LinearGradient colors={["#000", "#071a40"]} style={styles.container}>
-        <Text style={styles.title}>Mis Emprendimientos</Text>
+        <Text style={styles.title}>
+          Escoga el emprendimiento al que quiere agregar un servicio
+        </Text>
 
         {loading ? (
           <ActivityIndicator size="large" color="#0C86FF" />
@@ -79,11 +81,11 @@ const styles = StyleSheet.create({
     paddingTop: 40,
   },
   title: {
-    fontSize: 28,
+    fontSize: 15,
     fontWeight: "800",
     color: "#0C86FF",
     marginBottom: 20,
-    textAlign: "center",
+    textAlign: "left",
   },
   emptyText: {
     color: "#aaa",

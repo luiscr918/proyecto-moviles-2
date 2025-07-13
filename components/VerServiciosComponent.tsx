@@ -1,28 +1,28 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React, { useState } from "react";
 import { Emprendimiento } from "../screens/EmprendimientosServiceScreen";
-import { ModalNuevoServicio } from "./ModalNuevoServicio";
+import { ModalServicios } from "./ModalServicios";
 
-export const EmprendimientosComponent = (item: Emprendimiento) => {
-  //llamar modal para abrirlo
+export const VerServiciosComponent = (item: Emprendimiento) => {
   const [visible, setVisible] = useState(false);
+  //abrir modal
   const abrirModal = () => {
     setVisible(true);
   };
   return (
     <>
-      <ModalNuevoServicio
+      <ModalServicios
         visible={visible}
         onClose={setVisible}
         ruc={item.ruc}
+        nombreEmprendimiento={item.nombre_emprendimiento}
       />
       <TouchableOpacity onPress={abrirModal} style={styles.card}>
-        <Text style={styles.cardTitle}>{item.nombre_emprendimiento}</Text>
-        <Text style={styles.cardText}>📂 Categoría: {item.categoria}</Text>
-        <Text style={styles.cardText}>📝 {item.descripcion}</Text>
-        {item.direccion ? (
-          <Text style={styles.cardText}>📍 Dirección: {item.direccion}</Text>
-        ) : null}
+        <Text style={styles.cardTitle}>
+          {" "}
+          Nombre: {item.nombre_emprendimiento}
+        </Text>
+        <Text style={styles.cardText}> Categoría: {item.categoria}</Text>
       </TouchableOpacity>
     </>
   );

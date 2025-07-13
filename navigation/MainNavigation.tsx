@@ -114,7 +114,7 @@ const MyDraw = () => {
     >
       <Draw.Screen name="Menu" component={MySpaceScreen} />
       <Draw.Screen name="Perfil" component={PerfilScreen} />
-      <Draw.Screen name="Mis Servicios" component={MyTop} />
+      <Draw.Screen name="Mis Emprendimientos y Servicios" component={MyTop} />
       <Draw.Screen name="Solicitudes" component={SolicitudesScreen} />
       <Draw.Screen name="Reseñas" component={ReseniasScreen} />
     </Draw.Navigator>
@@ -123,7 +123,7 @@ const MyDraw = () => {
 const MyTop = () => {
   return (
     <Top.Navigator>
-      <Top.Screen name="Todos mis Servicios" component={AllServices} />
+      <Top.Screen name="Mis Emprendimientos" component={AllServices} />
       <Top.Screen
         name="Agregar Servicio"
         component={EmprendimientosServiceScreen}
