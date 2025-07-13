@@ -112,7 +112,7 @@ const MyDraw = () => {
         headerTitleStyle: { fontWeight: "bold" },
       }}
     >
-      <Draw.Screen name="Menu" component={MySpaceScreen} />
+      <Draw.Screen name="Mi Espacio" component={MySpaceScreen} />
       <Draw.Screen name="Perfil" component={PerfilScreen} />
       <Draw.Screen name="Mis Emprendimientos y Servicios" component={MyTop} />
       <Draw.Screen name="Solicitudes" component={SolicitudesScreen} />
