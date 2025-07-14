@@ -16,7 +16,7 @@ export const solicitudesStyles = StyleSheet.create({
     marginBottom: 15,
   },
   solicitudHeader: {
-    flexDirection: "row",
+    alignItems:'center',
     justifyContent: "space-between",
     marginBottom: 8,
   },

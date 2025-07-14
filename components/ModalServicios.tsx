@@ -18,7 +18,7 @@ interface Props {
   nombreEmprendimiento: string; //nombre del emprendiiento
 }
 export interface Servicio {
-  idServicio: string;
+  idServicio: number;
   rucEmprendimiento: string;
   nombre: string;
   descripcion: string;
