@@ -15,14 +15,12 @@ export const ListaSolicitudes = (item: Solicitudes) => {
   const [servicio, setServicio] = useState<Servicio>();
   //OBTENER DATOS DEL CLIENTE CON EL UID
   const obtenerCliente = async () => {
-
-    
     const { data, error } = await supabase
       .from("cliente")
       .select("*")
       .eq("uid", item.uid_cliente)
       .single(); //  un solo resultado
-      
+
     if (!error) {
       setcliente(data);
     } else {
@@ -39,7 +37,7 @@ export const ListaSolicitudes = (item: Solicitudes) => {
       .select("*")
       .eq("id_servicio", item.id_servicio)
       .single(); //  un solo resultado
-      
+
     if (!error) {
       setServicio(data);
     } else {
@@ -48,29 +46,62 @@ export const ListaSolicitudes = (item: Solicitudes) => {
   };
   useEffect(() => {
     obtenerDatosServicio();
-  }, []);
+  }, [item]);
+  //funcion para rechazar
+  const rechazarSolicitud = async () => {
+    const { error } = await supabase
+      .from("solicitud")
+      .update({ estado: "RECHAZADO" })
+      .eq("id_solicitud", item.id_solicitud);
+      if (error) {
+        Alert.alert("ERROR",error.message)
+      }
+  };
+   //funcion para APROBAR
+  const aprobarSolicitud = async () => {
+    const { error } = await supabase
+      .from("solicitud")
+      .update({ estado: "APROBADO" })
+      .eq("id_solicitud", item.id_solicitud);
+      if (error) {
+        Alert.alert("ERROR",error.message)
+      }
+  };
+
   return (
-    <View style={solicitudesStyles.solicitudItem}>
-      <View style={solicitudesStyles.solicitudHeader}>
-        <Text style={solicitudesStyles.cliente}>Cliente: {cliente?.nombre_completo}</Text>
-        <Text style={solicitudesStyles.cliente}>Servicio: {servicio?.nombre}</Text>
-        <Text style={solicitudesStyles.pedido}>Estado: {item.estado}</Text>
-        <Text style={solicitudesStyles.pedido}>Cantidad: {item.cantidad}</Text>
-        <Text style={solicitudesStyles.pedido}>Total: {item.total}</Text>
-      </View>
-      <View style={solicitudesStyles.botonesRow}>
-        <TouchableOpacity
-          style={[solicitudesStyles.button, solicitudesStyles.acceptBtn]}
-        >
-          <Text style={solicitudesStyles.buttonText}>Enviar</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[solicitudesStyles.button, solicitudesStyles.rejectBtn]}
-        >
-          <Text style={solicitudesStyles.buttonText}>Rechazar</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    <>
+      {item.estado === "SOLICITADO" && (
+        <View style={solicitudesStyles.solicitudItem}>
+          <View style={solicitudesStyles.solicitudHeader}>
+            <Text style={solicitudesStyles.cliente}>
+              Cliente: {cliente?.nombre_completo}
+            </Text>
+            <Text style={solicitudesStyles.cliente}>
+              Servicio: {servicio?.nombre}
+            </Text>
+            <Text style={solicitudesStyles.pedido}>Estado: {item.estado}</Text>
+            <Text style={solicitudesStyles.pedido}>
+              Cantidad: {item.cantidad}
+            </Text>
+            <Text style={solicitudesStyles.pedido}>Total: {item.total}</Text>
+          </View>
+          <View style={solicitudesStyles.botonesRow}>
+            <TouchableOpacity
+            onPress={aprobarSolicitud}
+              style={[solicitudesStyles.button, solicitudesStyles.acceptBtn]}
+            >
+              <Text style={solicitudesStyles.buttonText}>Aprobar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+            onPress={rechazarSolicitud}
+              style={[solicitudesStyles.button, solicitudesStyles.rejectBtn]}
+            >
+              <Text style={solicitudesStyles.buttonText}>Rechazar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+    </>
   );
 };
 

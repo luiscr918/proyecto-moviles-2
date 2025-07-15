@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Emprendimiento } from "../screens/EmprendimientosServiceScreen";
 import { ModalServicios } from "./ModalServicios";
 
@@ -9,6 +9,8 @@ export const VerServiciosComponent = (item: Emprendimiento) => {
   const abrirModal = () => {
     setVisible(true);
   };
+ 
+  
   return (
     <>
       <ModalServicios

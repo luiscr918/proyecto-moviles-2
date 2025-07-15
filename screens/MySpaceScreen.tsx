@@ -11,12 +11,10 @@ import { myspaceStyle } from "../styles/myspaceStyles";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 import { supabase } from "../supabase/Config";
 import { Emprendimiento } from "./EmprendimientosServiceScreen";
+import { Solicitudes } from "./SolicitudesScreen";
 
 export const MySpaceScreen = () => {
   const [empTotales, setEmpTotales] = useState<Emprendimiento[]>();
-  const solicitudesRecibidas = 12;
-  const valoracionPromedio = 4.8;
-
   const navigation = useNavigation();
   //traer el total de emprendimientos del emprendedor:
   const emprendimientosTotales = async () => {
@@ -40,6 +38,65 @@ export const MySpaceScreen = () => {
   useEffect(() => {
     emprendimientosTotales();
   }, []);
+  //Logica para solicitudes totales
+    const [solicitudesClientes, setSolicitudesClientes] = useState<Solicitudes[]>([]);
+  
+    // Paso 1: Obtener todos los servicios del emprendedor actual
+    const obtenerServiciosDelEmprendedor = async (uidEmprendedor: string) => {
+      const { data: emprendimientos, error: empError } = await supabase
+        .from("emprendimiento")
+        .select("ruc")
+        .eq("uid_emprendedor", uidEmprendedor);
+  
+      if (empError) throw new Error(empError.message);
+  
+      const rucs = emprendimientos.map((e) => e.ruc);
+  
+      const { data: servicios, error: servError } = await supabase
+        .from("servicio")
+        .select("id_servicio")
+        .in("ruc_emprendimiento", rucs);
+  
+      if (servError) throw new Error(servError.message);
+  
+      return servicios.map((s) => s.id_servicio);
+    };
+  
+    // Paso 2: Obtener las solicitudes con esos id_servicio
+    const obtenerSolicitudesFiltradas = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+  
+      if (!user) {
+        Alert.alert("Error", "No se pudo traer sus datos");
+        return;
+      }
+  
+      try {
+        const idsServicios = await obtenerServiciosDelEmprendedor(user.id);
+  
+        if (idsServicios.length === 0) {
+          setSolicitudesClientes([]); // No hay servicios, entonces no hay solicitudes
+          return;
+        }
+  
+        const { data: solicitudes, error: solError } = await supabase
+          .from("solicitud")
+          .select("*")
+          .in("id_servicio", idsServicios);
+  
+        if (solError) throw new Error(solError.message);
+  
+        setSolicitudesClientes(solicitudes);
+      } catch (e: any) {
+        Alert.alert("Error al filtrar solicitudes", e.message);
+      }
+    };
+  
+    useEffect(() => {
+      obtenerSolicitudesFiltradas();
+    }, [solicitudesClientes]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -56,14 +113,7 @@ export const MySpaceScreen = () => {
 
         <View style={myspaceStyle.infoBlock}>
           <Text style={myspaceStyle.label}>Solicitudes recibidas</Text>
-          <Text style={myspaceStyle.value}>{solicitudesRecibidas}</Text>
-        </View>
-
-        <View style={myspaceStyle.infoBlock}>
-          <Text style={myspaceStyle.label}>Valoración promedio</Text>
-          <Text style={myspaceStyle.value}>
-            {valoracionPromedio} / 5 <Text style={myspaceStyle.star}>⭐</Text>
-          </Text>
+          <Text style={myspaceStyle.value}>{solicitudesClientes.length}</Text>
         </View>
 
         <TouchableOpacity

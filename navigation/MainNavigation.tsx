@@ -13,7 +13,6 @@ import { RegistroEmprendimientoScreen } from "../screens/RegistroEmprendimientoS
 import { MySpaceScreen } from "../screens/MySpaceScreen";
 import { PerfilScreen } from "../screens/PerfilScreen";
 import { SolicitudesScreen } from "../screens/SolicitudesScreen";
-import { ReseniasScreen } from "../screens/ReseniasScreen";
 import { LoginScreen } from "../screens/LoginScreen";
 import { RegistroEmprendedorScreen } from "../screens/RegistroEmprendedorScreen";
 import { AllServices } from "../screens/AllServices";
@@ -116,7 +115,6 @@ const MyDraw = () => {
       <Draw.Screen name="Perfil" component={PerfilScreen} />
       <Draw.Screen name="Mis Emprendimientos y Servicios" component={MyTop} />
       <Draw.Screen name="Solicitudes" component={SolicitudesScreen} />
-      <Draw.Screen name="Reseñas" component={ReseniasScreen} />
     </Draw.Navigator>
   );
 };
