@@ -86,7 +86,9 @@ export const ModalNuevoServicio = ({ visible, onClose, ruc }: Props) => {
             onChangeText={setDescripcion}
             multiline
           />
-
+          <Text style={{ ...styles.title, fontSize: 15 }}>
+            Precio Unitario:
+          </Text>
           <TextInput
             style={styles.input}
             placeholder="Precio"

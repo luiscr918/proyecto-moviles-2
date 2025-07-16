@@ -17,12 +17,11 @@ export const EmprendimientosComponent = (item: Emprendimiento) => {
         ruc={item.ruc}
       />
       <TouchableOpacity onPress={abrirModal} style={styles.card}>
-        <Text style={styles.cardTitle}>{item.nombre_emprendimiento}</Text>
-        <Text style={styles.cardText}>📂 Categoría: {item.categoria}</Text>
-        <Text style={styles.cardText}>📝 {item.descripcion}</Text>
-        {item.direccion ? (
-          <Text style={styles.cardText}>📍 Dirección: {item.direccion}</Text>
-        ) : null}
+        <Text style={styles.cardTitle}>
+          {" "}
+          Nombre: {item.nombre_emprendimiento}
+        </Text>
+        <Text style={styles.cardText}> Categoría: {item.categoria}</Text>
       </TouchableOpacity>
     </>
   );
