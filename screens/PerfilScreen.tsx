@@ -14,7 +14,6 @@ import { perfilStyle } from "../styles/perfilStyle";
 import { supabase } from "../supabase/Config";
 import { ModalEditarPerfil } from "../components/ModalEditarPerfil";
 import { CommonActions, useNavigation } from "@react-navigation/native";
-//img
 import * as ImagePicker from "expo-image-picker";
 
 interface Emprendedor {
@@ -29,7 +28,7 @@ interface Emprendedor {
 export const PerfilScreen = () => {
   const [image, setImage] = useState<string | null>(null);
   const [emprendedor, setEmprendedor] = useState<Emprendedor>();
-  // Nuevo estado para controlar si hay una imagen pendiente de guardar
+  // Estado para controlar si hay una imagen pendiente de guardar
   const [imageToSave, setImageToSave] = useState<string | null>(null);
 
   // Función para traer usuario logeado
@@ -46,13 +45,13 @@ export const PerfilScreen = () => {
       if (data) {
         setEmprendedor(data);
         setImage(data.foto); // Establece la imagen actual del perfil
+      } else if (error) {
+        console.error("Error al cargar datos del emprendedor:", error.message);
       }
     }
   };
 
   // traerá el usuario logeado cada que se monte el screen
-  // Es mejor usar un arreglo de dependencias vacío [] para que se ejecute solo una vez al montar,
-  // y llamar traerLogeado() manualmente después de una actualización si necesitas refrescar
   useEffect(() => {
     traerLogeado();
   }, []);
@@ -73,7 +72,7 @@ export const PerfilScreen = () => {
 
   // modal
   const [visible, setVisible] = useState(false);
-  const [campo, setCampo] = useState(""); // Cambiado a setCampo
+  const [campo, setCampo] = useState("");
 
   const abrirModal = (valor: string) => {
     setVisible(true);
@@ -94,21 +93,21 @@ export const PerfilScreen = () => {
 
   // Función para seleccionar la imagen
   const pickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ["images"],
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'], // Usar el enum de Expo
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
     });
+    console.log(result);
 
     if (!result.canceled) {
-      const uri = result.assets[0].uri;
-      setImage(uri); // Muestra la imagen seleccionada en la UI
-      setImageToSave(uri); // Marca esta imagen como pendiente de guardar
+      setImage(result.assets[0].uri); // Muestra la imagen seleccionada en la UI
+      setImageToSave(result.assets[0].uri); // Marca esta imagen como pendiente de guardar
     }
   };
 
-  // NUEVA FUNCIÓN: Para guardar la imagen en Supabase
+  // Función para guardar la imagen en Supabase
   const saveImageToSupabase = async () => {
     if (!imageToSave || !emprendedor) {
       Alert.alert(
@@ -119,31 +118,41 @@ export const PerfilScreen = () => {
     }
 
     try {
-      // 1. Obtener el blob del archivo
-      const response = await fetch(imageToSave);
-      const blob = await response.blob();
+      // Determinar la extensión del archivo para el contentType y el filePath
+      const fileExtension = imageToSave.split(".").pop() || "png"; // Fallback a 'png'
+      const contentType = `image/${fileExtension}`;
 
-      // 2. Crear el path en Supabase Storage
-      const filePath = `public/${emprendedor.uid}.jpg`;
+      // Crear el path único para el usuario en Supabase Storage
+      const filePath = `public/${emprendedor.uid}.${fileExtension}`;
+      console.log("Subiendo imagen a:", filePath);
 
-      // 3. Subir al bucket
+      // Subir la imagen usando el objeto { uri: ... } como en tu ejemplo
       const { error: uploadError } = await supabase.storage
         .from("imagenes")
-        .upload(filePath, blob, {
-          upsert: true, // reemplaza si ya existe
-          contentType: "image/jpeg",
-        });
+        .upload(
+          filePath,
+          {
+            uri: imageToSave, // ¡Aquí está el truco que te funcionó!
+          } as any, // TypeScript no lo reconoce directamente, por eso 'as any'
+          {
+            contentType: contentType, // Usamos el tipo de contenido dinámico
+            upsert: true, // Reemplaza si ya existe una imagen con el mismo nombre
+          }
+        );
 
       if (uploadError) {
+        console.error("Error completo al subir la imagen:", uploadError); // Log detallado
         Alert.alert("Error al subir la imagen", uploadError.message);
         return;
       }
+      Alert.alert("Éxito", "Imagen subida al almacenamiento con éxito.");
 
-      // 4. Obtener URL pública
+      // Obtener URL pública
       const { data } = supabase.storage.from("imagenes").getPublicUrl(filePath);
       const publicUrl = data.publicUrl;
+      console.log("URL pública de la imagen:", publicUrl);
 
-      // 5. Guardar URL en la tabla `emprendedor`
+      // Guardar URL en la tabla `emprendedor`
       const { error: updateError } = await supabase
         .from("emprendedor")
         .update({ foto: publicUrl })
@@ -153,10 +162,11 @@ export const PerfilScreen = () => {
         Alert.alert("Error al guardar la URL", updateError.message);
       } else {
         Alert.alert("Foto actualizada con éxito");
-        setImageToSave(null); // Resetea el estado para ocultar el botón
-        traerLogeado(); // Recarga los datos del usuario para asegurar que la URL sea la correcta
+        setImageToSave(null); // Borra la imagen pendiente de guardar
+        traerLogeado(); // Refresca los datos del perfil
       }
     } catch (e: any) {
+      console.error("Error completo al guardar la imagen:", e);
       Alert.alert("Error", `Algo salió mal al guardar: ${e.message}`);
     }
   };
