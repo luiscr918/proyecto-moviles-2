@@ -1,26 +1,14 @@
 import React, { useEffect, useState } from "react";
-import {
-  Text,
-  View,
-  FlatList,
-  SafeAreaView,
-  Alert,
-} from "react-native";
+import { Text, View, FlatList, SafeAreaView, Alert } from "react-native";
 import { solicitudesStyles } from "../styles/solicitudesStyles";
 import { supabase } from "../supabase/Config";
-import { ListaSolicitudes } from "../components/ListaSolicitudes";
+import { Solicitudes } from "./SolicitudesScreen";
+import { HistorialSolicitudesComponent } from "../components/HistorialSolicitudesComponent";
 
-export interface Solicitudes {
-  id_solicitud: number;
-  uid_cliente: string;
-  id_servicio: number;
-  estado: string;
-  total: number;
-  cantidad: number;
-}
-
-export const SolicitudesScreen = () => {
-  const [solicitudesClientes, setSolicitudesClientes] = useState<Solicitudes[]>([]);
+export const HistorialSolicitudesScreen = () => {
+  const [solicitudesClientes, setSolicitudesClientes] = useState<Solicitudes[]>(
+    []
+  );
 
   // Paso 1: Obtener todos los servicios del emprendedor actual
   const obtenerServiciosDelEmprendedor = async (uidEmprendedor: string) => {
@@ -81,11 +69,11 @@ export const SolicitudesScreen = () => {
 
   return (
     <SafeAreaView>
-      <Text style={solicitudesStyles.title}>Solicitudes Pendientes</Text>
+      <Text style={solicitudesStyles.title}>Historial de Solicitudes</Text>
       <FlatList
         data={solicitudesClientes}
         contentContainerStyle={{ paddingBottom: 60 }}
-        renderItem={({ item }) => <ListaSolicitudes {...item} />}
+        renderItem={({ item }) => <HistorialSolicitudesComponent {...item} />}
       />
     </SafeAreaView>
   );

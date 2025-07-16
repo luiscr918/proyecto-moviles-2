@@ -17,6 +17,7 @@ import { LoginScreen } from "../screens/LoginScreen";
 import { RegistroEmprendedorScreen } from "../screens/RegistroEmprendedorScreen";
 import { AllServices } from "../screens/AllServices";
 import { EmprendimientosServiceScreen } from "../screens/EmprendimientosServiceScreen";
+import { HistorialSolicitudesScreen } from "../screens/HistorialSolicitudesScreen";
 
 const Tab = createBottomTabNavigator();
 const Draw = createDrawerNavigator();
@@ -115,6 +116,10 @@ const MyDraw = () => {
       <Draw.Screen name="Perfil" component={PerfilScreen} />
       <Draw.Screen name="Mis Emprendimientos y Servicios" component={MyTop} />
       <Draw.Screen name="Solicitudes" component={SolicitudesScreen} />
+      <Draw.Screen
+        name="Historial Solicitudes"
+        component={HistorialSolicitudesScreen}
+      />
     </Draw.Navigator>
   );
 };
