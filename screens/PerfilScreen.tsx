@@ -94,7 +94,7 @@ export const PerfilScreen = () => {
   // Función para seleccionar la imagen
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'], // Usar el enum de Expo
+      mediaTypes: ["images"], // Usar el enum de Expo
       allowsEditing: true,
       aspect: [1, 1],
       quality: 1,
