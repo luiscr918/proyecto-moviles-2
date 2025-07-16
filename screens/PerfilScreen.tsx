@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Alert,
   SafeAreaView,
+  Image,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Feather } from "@expo/vector-icons";
@@ -13,16 +14,25 @@ import { perfilStyle } from "../styles/perfilStyle";
 import { supabase } from "../supabase/Config";
 import { ModalEditarPerfil } from "../components/ModalEditarPerfil";
 import { CommonActions, useNavigation } from "@react-navigation/native";
+//img
+import * as ImagePicker from "expo-image-picker";
+
 interface Emprendedor {
   uid: string;
   cedula: string;
   nombre_completo: string;
   correo: string;
   telefono: string;
+  foto: string;
 }
+
 export const PerfilScreen = () => {
+  const [image, setImage] = useState<string | null>(null);
   const [emprendedor, setEmprendedor] = useState<Emprendedor>();
-  //funcion para traer usuario logeado
+  // Nuevo estado para controlar si hay una imagen pendiente de guardar
+  const [imageToSave, setImageToSave] = useState<string | null>(null);
+
+  // Función para traer usuario logeado
   const traerLogeado = async () => {
     const {
       data: { user },
@@ -33,13 +43,19 @@ export const PerfilScreen = () => {
         .select("*") // traigo todos sus datos
         .eq("uid", user.id) // Filtro por el UID que es mi clave primaria
         .single(); // Esperas un solo resultado
-      setEmprendedor(data);
+      if (data) {
+        setEmprendedor(data);
+        setImage(data.foto); // Establece la imagen actual del perfil
+      }
     }
   };
-  //traera el usuario logeado cada que ejecute el screen
+
+  // traerá el usuario logeado cada que se monte el screen
+  // Es mejor usar un arreglo de dependencias vacío [] para que se ejecute solo una vez al montar,
+  // y llamar traerLogeado() manualmente después de una actualización si necesitas refrescar
   useEffect(() => {
     traerLogeado();
-  }, [emprendedor]);
+  }, []);
 
   const onEditar = async (campo: string, valor: string) => {
     const { error } = await supabase
@@ -47,19 +63,24 @@ export const PerfilScreen = () => {
       .update({ [campo]: valor })
       .eq("uid", emprendedor?.uid);
     if (!error) {
-      Alert.alert("Exito", "Se actualizo correctamente");
+      Alert.alert("Éxito", "Se actualizó correctamente");
+      // Refrescar los datos después de una edición
+      traerLogeado();
     } else {
       Alert.alert("Error", error.message);
     }
   };
-  //modal
+
+  // modal
   const [visible, setVisible] = useState(false);
-  const [campo, setcampo] = useState("");
+  const [campo, setCampo] = useState(""); // Cambiado a setCampo
+
   const abrirModal = (valor: string) => {
     setVisible(true);
-    setcampo(valor);
+    setCampo(valor);
   };
-  //cerrar sesion
+
+  // cerrar sesion
   const navigation = useNavigation();
   const cerrarSesion = async () => {
     const { error } = await supabase.auth.signOut();
@@ -67,7 +88,76 @@ export const PerfilScreen = () => {
       Alert.alert("Hasta pronto", "Cerraste sesión correctamente");
       navigation.dispatch(CommonActions.navigate({ name: "Login" }));
     } else {
-      Alert.alert("Error al cerrar sesion", error.message);
+      Alert.alert("Error al cerrar sesión", error.message);
+    }
+  };
+
+  // Función para seleccionar la imagen
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ["images"],
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      const uri = result.assets[0].uri;
+      setImage(uri); // Muestra la imagen seleccionada en la UI
+      setImageToSave(uri); // Marca esta imagen como pendiente de guardar
+    }
+  };
+
+  // NUEVA FUNCIÓN: Para guardar la imagen en Supabase
+  const saveImageToSupabase = async () => {
+    if (!imageToSave || !emprendedor) {
+      Alert.alert(
+        "Error",
+        "No hay imagen seleccionada o usuario no encontrado."
+      );
+      return;
+    }
+
+    try {
+      // 1. Obtener el blob del archivo
+      const response = await fetch(imageToSave);
+      const blob = await response.blob();
+
+      // 2. Crear el path en Supabase Storage
+      const filePath = `public/${emprendedor.uid}.jpg`;
+
+      // 3. Subir al bucket
+      const { error: uploadError } = await supabase.storage
+        .from("imagenes")
+        .upload(filePath, blob, {
+          upsert: true, // reemplaza si ya existe
+          contentType: "image/jpeg",
+        });
+
+      if (uploadError) {
+        Alert.alert("Error al subir la imagen", uploadError.message);
+        return;
+      }
+
+      // 4. Obtener URL pública
+      const { data } = supabase.storage.from("imagenes").getPublicUrl(filePath);
+      const publicUrl = data.publicUrl;
+
+      // 5. Guardar URL en la tabla `emprendedor`
+      const { error: updateError } = await supabase
+        .from("emprendedor")
+        .update({ foto: publicUrl })
+        .eq("uid", emprendedor.uid);
+
+      if (updateError) {
+        Alert.alert("Error al guardar la URL", updateError.message);
+      } else {
+        Alert.alert("Foto actualizada con éxito");
+        setImageToSave(null); // Resetea el estado para ocultar el botón
+        traerLogeado(); // Recarga los datos del usuario para asegurar que la URL sea la correcta
+      }
+    } catch (e: any) {
+      Alert.alert("Error", `Algo salió mal al guardar: ${e.message}`);
     }
   };
 
@@ -79,6 +169,34 @@ export const PerfilScreen = () => {
       >
         <ScrollView contentContainerStyle={perfilStyle.scroll}>
           <Text style={perfilStyle.title}>Mi Perfil</Text>
+          {/* foto */}
+          <View style={perfilStyle.avatarContainer}>
+            <TouchableOpacity onPress={pickImage}>
+              <View>
+                <Image
+                  source={{
+                    uri:
+                      image ||
+                      emprendedor?.foto ||
+                      "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+                  }}
+                  style={perfilStyle.avatar}
+                />
+                <View style={perfilStyle.cameraIcon}>
+                  <Feather name="camera" size={20} color="#fff" />
+                </View>
+              </View>
+            </TouchableOpacity>
+            {/* Botón de guardar foto, solo visible si hay una imagen nueva */}
+            {imageToSave && (
+              <TouchableOpacity
+                onPress={saveImageToSupabase}
+                style={[perfilStyle.button, { marginTop: 10, width: 150 }]}
+              >
+                <Text style={perfilStyle.buttonText}>Guardar Foto</Text>
+              </TouchableOpacity>
+            )}
+          </View>
           {/* este modal se activa o desactiva segun visible */}
           <ModalEditarPerfil
             visible={visible}
@@ -123,7 +241,7 @@ export const PerfilScreen = () => {
           </View>
 
           <View style={perfilStyle.fieldRow}>
-            <Text style={perfilStyle.label}>Cedula</Text>
+            <Text style={perfilStyle.label}>Cédula</Text>
             <View style={perfilStyle.valueRow}>
               <Text style={perfilStyle.value}>{emprendedor?.cedula}</Text>
               <TouchableOpacity

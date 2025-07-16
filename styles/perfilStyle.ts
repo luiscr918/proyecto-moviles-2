@@ -58,4 +58,25 @@ export const perfilStyle = StyleSheet.create({
     fontSize: 20,
     fontWeight: "700",
   },
+  avatarContainer: {
+    alignItems: "center",
+    marginBottom: 20,
+  },
+
+  avatar: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    borderWidth: 2,
+    borderColor: "#0C86FF",
+  },
+
+  cameraIcon: {
+    position: "absolute",
+    bottom: 0,
+    right: 0,
+    backgroundColor: "#0C86FF",
+    borderRadius: 20,
+    padding: 5,
+  },
 });
