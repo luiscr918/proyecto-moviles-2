@@ -4,7 +4,7 @@ import { CommonActions, useNavigation } from "@react-navigation/native";
 import { Reutilizables } from "../styles/reutilizables";
 import { loginStyles } from "../styles/loginStyles";
 import { supabase } from "../supabase/Config";
-
+import * as Haptics from "expo-haptics";
 export const LoginScreen = () => {
   const navigation = useNavigation();
   const [correo, setCorreo] = useState("");
@@ -16,10 +16,12 @@ export const LoginScreen = () => {
       password: contrasenia,
     });
     if (data.user != null) {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
       navigation.dispatch(CommonActions.navigate({ name: "Principal" }));
       setCorreo("");
       setContrasenia("");
     } else {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Error);
       Alert.alert("No se pudo iniciar sesion", error?.message);
     }
   };
