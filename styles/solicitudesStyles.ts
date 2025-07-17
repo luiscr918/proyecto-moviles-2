@@ -56,4 +56,16 @@ export const solicitudesStyles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 16,
   },
+  row: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  imagenCliente: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginRight: 15,
+    backgroundColor: "#ccc",
+  },
 });
