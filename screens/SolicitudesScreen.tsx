@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Text,
-  View,
-  FlatList,
-  SafeAreaView,
-  Alert,
-} from "react-native";
+import { Text, View, FlatList, SafeAreaView, Alert, ActivityIndicator, StyleSheet } from "react-native";
 import { solicitudesStyles } from "../styles/solicitudesStyles";
 import { supabase } from "../supabase/Config";
 import { ListaSolicitudes } from "../components/ListaSolicitudes";
@@ -20,7 +14,10 @@ export interface Solicitudes {
 }
 
 export const SolicitudesScreen = () => {
-  const [solicitudesClientes, setSolicitudesClientes] = useState<Solicitudes[]>([]);
+  const [solicitudesClientes, setSolicitudesClientes] = useState<Solicitudes[]>(
+    []
+  );
+  const [loading, setLoading] = useState(true); // Estado para controlar si está cargando
 
   // Paso 1: Obtener todos los servicios del emprendedor actual
   const obtenerServiciosDelEmprendedor = async (uidEmprendedor: string) => {
@@ -59,6 +56,7 @@ export const SolicitudesScreen = () => {
 
       if (idsServicios.length === 0) {
         setSolicitudesClientes([]); // No hay servicios, entonces no hay solicitudes
+        setLoading(false); // Terminamos la carga aunque no haya solicitudes
         return;
       }
 
@@ -68,9 +66,10 @@ export const SolicitudesScreen = () => {
         .in("id_servicio", idsServicios);
 
       if (solError) throw new Error(solError.message);
-
       setSolicitudesClientes(solicitudes);
+      setLoading(false); // Terminamos la carga
     } catch (e: any) {
+      setLoading(false); // Terminamos la carga
       Alert.alert("Error al filtrar solicitudes", e.message);
     }
   };
@@ -80,13 +79,30 @@ export const SolicitudesScreen = () => {
   }, [solicitudesClientes]);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ flex: 1 }}>
       <Text style={solicitudesStyles.title}>Solicitudes Pendientes</Text>
-      <FlatList
-        data={solicitudesClientes}
-        contentContainerStyle={{ paddingBottom: 60 }}
-        renderItem={({ item }) => <ListaSolicitudes {...item} />}
-      />
+
+      {/* Muestra el ActivityIndicator mientras se cargan las solicitudes */}
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#0C86FF" />
+        </View>
+      ) : (
+        <FlatList
+          data={solicitudesClientes}
+          contentContainerStyle={{ paddingBottom: 60 }}
+          renderItem={({ item }) => <ListaSolicitudes {...item} />}
+        />
+      )}
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Fondo oscuro para la carga
+  },
+});
