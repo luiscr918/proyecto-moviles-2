@@ -28,7 +28,8 @@
     "react-native-pager-view": "6.7.1",
     "expo-image-picker": "~16.1.4",
     "expo-haptics": "~14.1.4",
-    "expo-av": "~15.1.7"
+    "expo-av": "~15.1.7",
+    "expo-updates": "~0.28.17"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

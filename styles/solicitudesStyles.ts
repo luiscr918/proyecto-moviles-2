@@ -16,10 +16,12 @@ export const solicitudesStyles = StyleSheet.create({
     marginBottom: 15,
   },
   solicitudHeader: {
-    alignItems:'center',
-    justifyContent: "space-between",
-    marginBottom: 8,
-  },
+  flex: 1,
+  flexShrink: 1,
+  alignItems: "flex-start",
+  justifyContent: "space-between",
+  marginBottom: 8,
+},
   cliente: {
     color: "#0C86FF",
     fontWeight: "700",

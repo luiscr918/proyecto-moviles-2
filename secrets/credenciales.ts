@@ -1,0 +1,2 @@
+export const URL="https://gdzrkcziftzctnajiwzx.supabase.co";
+export const API_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdkenJrY3ppZnR6Y3RuYWppd3p4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE5ODcxNzMsImV4cCI6MjA2NzU2MzE3M30.yst9VGnBiJzJE1kVxAhk2eNG0tIlT7I95Q334KZWIVc";

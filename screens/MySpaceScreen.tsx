@@ -69,7 +69,6 @@ export const MySpaceScreen = () => {
       } = await supabase.auth.getUser();
   
       if (!user) {
-        Alert.alert("Error", "No se pudo traer sus datos");
         return;
       }
   

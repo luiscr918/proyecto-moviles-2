@@ -46,7 +46,7 @@ export const EmprendimientosServiceScreen = () => {
 
   useEffect(() => {
     traerLogeado();
-  }, []);
+  }, [emprendimientos]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

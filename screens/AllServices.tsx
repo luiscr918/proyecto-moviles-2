@@ -38,7 +38,7 @@ export const AllServices = () => {
 
   useEffect(() => {
     traerLogeado();
-  }, []);
+  }, [emprendimientos]);
 
   return (
     <SafeAreaView style={{ flex: 1 }}>

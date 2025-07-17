@@ -82,7 +82,11 @@ export const HistorialSolicitudesComponent = (item: Solicitudes) => {
           <Text style={solicitudesStyles.cliente}>
             Cliente: {cliente?.nombre_completo}
           </Text>
-          <Text style={solicitudesStyles.cliente}>
+          <Text
+            style={solicitudesStyles.cliente}
+            numberOfLines={2}
+            ellipsizeMode="tail"
+          >
             Servicio: {servicio?.nombre}
           </Text>
           <Text style={solicitudesStyles.pedido}>

@@ -1,4 +1,11 @@
-import { Alert, StyleSheet, Text, TouchableOpacity, View, Image } from "react-native";
+import {
+  Alert,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Image,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import { Solicitudes } from "../screens/SolicitudesScreen";
 import { solicitudesStyles } from "../styles/solicitudesStyles";
@@ -80,7 +87,11 @@ export const ListaSolicitudes = (item: Solicitudes) => {
           <View style={solicitudesStyles.row}>
             {cliente?.imagen && (
               <Image
-                source={{ uri: cliente.imagen ?? 'https://cdn-icons-png.flaticon.com/512/149/149071.png' }}
+                source={{
+                  uri:
+                    cliente.imagen ??
+                    "https://cdn-icons-png.flaticon.com/512/149/149071.png",
+                }}
                 style={solicitudesStyles.imagenCliente}
               />
             )}
@@ -88,11 +99,19 @@ export const ListaSolicitudes = (item: Solicitudes) => {
               <Text style={solicitudesStyles.cliente}>
                 Cliente: {cliente?.nombre_completo}
               </Text>
-              <Text style={solicitudesStyles.cliente}>
+              <Text
+                style={solicitudesStyles.cliente}
+                numberOfLines={2}
+                ellipsizeMode="tail"
+              >
                 Servicio: {servicio?.nombre}
               </Text>
-              <Text style={solicitudesStyles.pedido}>Estado: {item.estado}</Text>
-              <Text style={solicitudesStyles.pedido}>Cantidad: {item.cantidad}</Text>
+              <Text style={solicitudesStyles.pedido}>
+                Estado: {item.estado}
+              </Text>
+              <Text style={solicitudesStyles.pedido}>
+                Cantidad: {item.cantidad}
+              </Text>
               <Text style={solicitudesStyles.pedido}>Total: {item.total}</Text>
             </View>
           </View>
@@ -116,4 +135,3 @@ export const ListaSolicitudes = (item: Solicitudes) => {
     </>
   );
 };
-

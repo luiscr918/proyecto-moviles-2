@@ -72,7 +72,7 @@ export const HistorialSolicitudesScreen = () => {
 
   return (
       <SafeAreaView style={{ flex: 1 }}>
-        <Text style={solicitudesStyles.title}>Solicitudes Pendientes</Text>
+        <Text style={solicitudesStyles.title}>Historial de Solicitudes</Text>
   
         {/* Muestra el ActivityIndicator mientras se cargan las solicitudes */}
         {loading ? (

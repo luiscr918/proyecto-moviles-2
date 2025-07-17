@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "proyecto-moviles2-app",
-    "slug": "proyecto-moviles2-app",
+    "name": "StartUps Partners",
+    "slug": "startups-partners",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/imgs/logoStartUpsPartners.jpeg",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/splash-icon.png",
+      "image": "./assets/imgs/logoStartUpsPartners.jpeg",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,13 +17,25 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/imgs/logoStartUpsPartners.jpeg",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "package": "com.luiscr918.startupspartners"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/imgs/logoStartUpsPartners.jpeg"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "a72e2d82-c1d6-4c2b-875b-32f8a2f34fda"
+      }
+    },
+    "owner": "luiscr918",
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/a72e2d82-c1d6-4c2b-875b-32f8a2f34fda"
     }
   }
 }
